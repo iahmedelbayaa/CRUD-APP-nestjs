@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Student } from './entities/student.entites';
+import { Student } from './entities/be3o.entites';
 
 @Injectable()
 export class Be3oService {
@@ -57,6 +57,6 @@ export class Be3oService {
     
     }
 
-    
+
 
 }

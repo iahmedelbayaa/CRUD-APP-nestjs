@@ -1,5 +1,6 @@
 import { Body, Controller , Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
 import { Be3oService } from './be3o.service';
+import { Be3oDto } from './dto/be3o.dto/be3o.dto';
 
 @Controller('be3o')
 export class Be3oController {
@@ -14,7 +15,7 @@ export class Be3oController {
         return res.status(200).send("hello be3o 2")
     }
     @Post()
-    postBe3o(@Body() hello) {
+    postBe3o(@Body() hello:Be3oDto) {
         return hello;
     }
     @Get(':id')
