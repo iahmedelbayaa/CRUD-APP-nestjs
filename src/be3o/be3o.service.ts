@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Be3o, Student } from './entities/be3o.entites';
+import { Be3o } from './entities/be3o.entites';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Be3oDto } from './dto/be3o.dto/be3o.dto';
@@ -54,7 +54,7 @@ export class Be3oService {
         });
         return this.be3oRepository.save(updateStudent);
     }
-    async remove(id: string) {
+    async remove(id: number) {
         await this.be3oRepository.delete(id);
 
     }

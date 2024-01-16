@@ -12,15 +12,15 @@ export class Be3oController {
     }
     @Get()
     getAll(@Res() res) {
-        return res.status(200).send("hello be3o 2")
+        return this.be3oService.findAll()
     }
     @Post()
     postBe3o(@Body() hello:Be3oDto) {
-        return hello;
+        return this.be3oService.create(hello)
     }
     @Get(':id')
     getBe3o(@Param('id') id: number) {
-        return `Hello Be3o ${id}`
+        return this.be3oService.findOne(id);
     }
     //specific return Post
     @Post()
@@ -30,12 +30,12 @@ export class Be3oController {
     }
     //put
     @Put(':id')
-    putBe3o(@Param('id') id: number, @Body() body) {
-        return `Hello Be3o ${id} ${JSON.stringify(body)}`
+    putBe3o(@Param('id') id: number, @Body() body:Be3oDto) {
+        return this.be3oService.update(id, body);
     }
     //delete
     @Delete(':id')
     deleteBe3o(@Param('id') id: number) {
-        return `Delete Be3o ${id}`
+        return this.be3oService.remove(id);
     }
 }
