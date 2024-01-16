@@ -1,6 +1,14 @@
-export class Student {
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+
+@Entity()
+export class Be3o {
+    @PrimaryGeneratedColumn()
     id: number;
+    @Column()
     name: string;
+    @Column()
     age: number;
-    address: string[];
+    @Column('json',{nullable:true})
+    address: string;
 }
