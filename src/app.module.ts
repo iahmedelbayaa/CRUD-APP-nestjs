@@ -3,9 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Be3oModule } from './be3o/be3o.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [Be3oModule,
+  imports: [
+    Be3oModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -15,7 +17,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: 'be3o',
       autoLoadEntities:true,
       synchronize: true,  //in dev mode true in publish false
-    })
+    }),
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

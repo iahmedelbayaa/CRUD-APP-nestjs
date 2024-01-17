@@ -4,36 +4,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Be3oDto } from './dto/be3o.dto/be3o.dto';
 import { UpdateBe3oDto } from './dto/update-be3o.dto/update-be3o.dto';
+import { Courses } from './entities/courses.entity';
 
 @Injectable()
 export class Be3oService {
 
     constructor(@InjectRepository(Be3o)
-    private readonly be3oRepository : Repository<Be3o>
+    private readonly be3oRepository: Repository<Be3o>,
+    @InjectRepository(Courses)
+    private readonly coursesRepository: Repository<Courses>
     ) { }
-    // private student: Student[] = [
-    //     {
-    //         id: 1,
-    //         name: "ahmed",
-    //         age: 22,
-    //         address: ["cairo", "giza"]
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "mohamed",
-    //         age: 23,
-    //         address: ["cairo", "giza"]
-    //     },
-    //     {
-    //         id: 3,
-    //         name: "ali",
-    //         age: 24,
-    //         address: ["cairo", "giza"]
-    //     }
-    // ]
+
 
     async findAll() : Promise<Be3o[]>{
-        return this.be3oRepository.find();
+        return this.be3oRepository.find({
+            relations: ['courses']
+        });
     }
 
     async findOne(id: number): Promise<Be3o> {
@@ -43,14 +29,24 @@ export class Be3oService {
     }
     
     async create(createBe3oDto: Be3oDto) {
-        const newBe3o = this.be3oRepository.create(createBe3oDto);
+        const courses = await Promise.all(
+            createBe3oDto.courses.map(name => this.preloadCoursesByName(name))
+        );
+        const newBe3o = this.be3oRepository.create({
+            ...createBe3oDto,
+            courses,
+        });
         return this.be3oRepository.save(newBe3o);
     }
 
     async update(id: number, updateStudentDto: UpdateBe3oDto) {
+        const courses = await Promise.all(
+            updateStudentDto.courses.map(name => this.preloadCoursesByName(name))
+        );
         const updateStudent = await this.be3oRepository.preload({
-            id: id,
-            ...updateStudentDto
+            id: +id,
+            ...updateStudentDto,
+            courses,
         });
         return this.be3oRepository.save(updateStudent);
     }
@@ -59,6 +55,13 @@ export class Be3oService {
 
     }
 
+    private async preloadCoursesByName(name: string) {
+        const existingCourse = await this.coursesRepository.findOne({ where: { name } });
+        if (existingCourse) {
+            return existingCourse;
+        }
+        return this.coursesRepository.create({ name });
+    }
 
 
 }
